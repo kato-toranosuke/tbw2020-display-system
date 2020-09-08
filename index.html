@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <!-- Viewportの幅は実際の解像度ではなく端末やブラウザに合わせた値を返します。 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TBW2020 Display System</title>
+
+    <!-- Web Appをホーム画面にインストールした際の挙動を定義するmetaタグ -->
+    <!-- iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- Chrome for Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <!-- Chrome、Opera、Firefox、Samsung(manifestでの対応の場合) -->
+    <link rel="manifest" href="./manifest.json">
+
+    <!-- cssの読み込み -->
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/structure.css">
+  </head>
+
+  <body>
+    <div id="container">
+
+      <!-- 高度表示バー -->
+      <div id="alt_barmeter_wrapper" class="wrapper">
+        <!-- 現在高度の数値表示 -->
+        <div class="present_val bar-text">
+          <span>2.98</span><span>m</span>
+        </div>
+
+        <!-- バー表示 -->
+        <svg viewBox="0 -1200 400 1200" id="alt_barmeter">
+          <defs>
+            <style>
+              .bar-text
+              {
+                  font-family: Arial, Helvetica, sans-serif;
+
+                  fill: white;
+                  stroke: none;
+                  text-anchor: start;
+              }
+
+            </style>
+          </defs>
+
+          <!-- Bar背景の白色部分 -->
+          <rect x="0" y="-1150" width="400" height="1150" fill="white"></rect>
+          <!-- Bar部分 -->
+          <rect x="0" y="-600" width="400" height="600" fill="tomato" class="bar"></rect>
+          <!-- Bar周辺を囲む黒色部分。これを上から被せることによって、Barの形を実現している。 -->
+          <path d="" fill-rule="evenodd" fill="black" stroke="none" class="base_barmeter"></path>
+          <!-- 目盛り -->
+          <g class="scale">
+            <!-- 目盛り線 -->
+            <g stroke="black" stroke-width="5" class="scale_lines">
+              <line x1="0" y1="-100" x2="400" y2="-100"></line>
+              <line x1="0" y1="-150" x2="400" y2="-150" stroke-dasharray="5 5" stroke-dashoffset="2.5"></line>
+              <line x1="0" y1="-950" x2="400" y2="-950" stroke-dasharray="5 5" stroke-dashoffset="2.5"></line>
+              <line x1="0" y1="-1000" x2="400" y2="-1000"></line>
+            </g>
+            <!-- 目盛り数値 -->
+            <!-- dominant-baselineでy=0の位置を指定できる -->
+            <g class="scale_texts bar-text" font-size="30" dominant-baseline="text-before-edge">
+              <text x="" y="-100">1.0</text>
+              <text x="" y="-150">1.5</text>
+              <text x="" y="-950">9.5</text>
+              <text x="" y="-1000">10.0</text>
+            </g>
+          </g>
+          <!-- 現在値 -->
+          <!-- <text class="present_val bar-text" x="" y="-1020" font-size="">
+            <tspan>2.98</tspan>
+            <tspan>m</tspan>
+          </text> -->
+        </svg>
+      </div>
+
+      <!-- 対気速度 -->
+      <div id="aspd_tachometer_wrapper" class="wrapper">
+        <div id="aspd_label" class="label">対気速度</div>
+        <svg width="400" height="400" viewBox="-100 -100 200 200" id="aspd_tachometer" class="tachometer">
+          <defs>
+            <style>
+              .tacho-text
+              {
+                  font-family: Arial, Helvetica, sans-serif;
+
+                  text-anchor: middle;
+                  fill: white;
+                  stroke: none;
+              }
+
+            </style>
+          </defs>
+
+          <path d="" fill="white" class="base_arc"></path>
+          <path d="" fill="skyblue" class="arc">
+            <!-- <animate attributeName="d" dur="2.5s" from="" to="" repeatCount="indefinite"> -->
+          </path>
+          <circle cx="0" cy="0" r="80" fill="black"></circle>
+          <!-- 目盛り -->
+          <g class="scale">
+            <!-- 目盛り線 -->
+            <g stroke="black" stroke-width="4" class="scale_lines">
+              <line x1="" y1="" x2="" y2=""></line>
+              <line x1="" y1="" x2="" y2=""></line>
+              <line x1="" y1="" x2="" y2=""></line>
+              <line x1="" y1="" x2="" y2=""></line>
+              <line x1="" y1="" x2="" y2=""></line>
+            </g>
+          </g>
+          <text x="0" y="10" class="tacho-text present_val" font-size="60">50.0</text>
+          <text x="0" y="50" class="tacho-text" font-size="30">m/s</text>
+        </svg>
+      </div>
+
+      <!-- 対地速度 -->
+      <div id="gspd_tachometer_wrapper" class="wrapper">
+        <div id="gspd_label" class="label">対地速度</div>
+        <svg width="400" height="400" viewBox="-100 -100 200 200" id="gspd_tachometer" class="tachometer">
+          <defs>
+            <style>
+              .tacho-text
+              {
+                  font-family: Arial, Helvetica, sans-serif;
+
+                  text-anchor: middle;
+                  fill: white;
+                  stroke: none;
+              }
+
+            </style>
+          </defs>
+
+          <path d="" fill="white" class="base_arc"></path>
+          <path d="" fill="skyblue" class="arc">
+            <!-- <animate attributeName="d" dur="2.5s" from="" to="" repeatCount="indefinite"> -->
+          </path>
+          <circle cx="0" cy="0" r="80" fill="black"></circle>
+          <!-- 目盛り -->
+          <g class="scale">
+            <!-- 目盛り線 -->
+            <g stroke="black" stroke-width="4" class="scale_lines">
+              <line x1="" y1="" x2="" y2=""></line>
+              <line x1="" y1="" x2="" y2=""></line>
+              <line x1="" y1="" x2="" y2=""></line>
+              <line x1="" y1="" x2="" y2=""></line>
+              <line x1="" y1="" x2="" y2=""></line>
+            </g>
+          </g>
+          <text x="0" y="10" class="tacho-text present_val" font-size="60">50.0</text>
+          <text x="0" y="50" class="tacho-text" font-size="30">m/s</text>
+        </svg>
+      </div>
+
+      <!-- 回転数 -->
+      <div id="rpm_tachometer_wrapper" class="wrapper">
+        <div id="rpm_label" class="label">回転数</div>
+        <svg width="400" height="400" viewBox="-100 -100 200 200" id="rpm_tachometer" class="tachometer">
+          <defs>
+            <style>
+              .tacho-text
+              {
+                  font-family: Arial, Helvetica, sans-serif;
+
+                  text-anchor: middle;
+                  fill: white;
+                  stroke: none;
+              }
+
+            </style>
+          </defs>
+
+          <path d="" fill="white" class="base_arc"></path>
+          <path d="" fill="skyblue" class="arc"></path>
+          <circle cx="0" cy="0" r="80" fill="black"></circle>
+          <!-- 目盛り -->
+          <g class="scale">
+            <!-- 目盛り線 -->
+            <g stroke="black" stroke-width="4" class="scale_lines">
+              <line x1="" y1="" x2="" y2=""></line>
+              <line x1="" y1="" x2="" y2=""></line>
+              <line x1="" y1="" x2="" y2=""></line>
+              <line x1="" y1="" x2="" y2=""></line>
+              <line x1="" y1="" x2="" y2=""></line>
+            </g>
+          </g>
+          <text x="0" y="10" class="tacho-text present_val" font-size="60">50.0</text>
+          <text x="0" y="50" class="tacho-text" font-size="30">r/min</text>
+        </svg>
+      </div>
+
+      <!-- map -->
+      <div id="map_wrapper" class="wrapper">
+        <div class="map" id="map">
+          <canvas class="map_layer"></canvas>
+          <svg class="points_layer" expanded="true">
+            <defs>
+              <style>
+                circle
+                {
+                    fill: rgb(150, 150, 150);
+                    stroke: white;
+                }
+
+                circle:last-of-type
+                {
+                    fill: black;
+                    stroke: none;
+                }
+
+                .present_effect
+                {
+                    fill: white;
+                    stroke: none;
+                }
+
+              </style>
+            </defs>
+            <g class="points">
+            </g>
+            <circle class="present_effect" r="0">
+              <animate attributeName="r" begin="0s" dur="1.5s" repeatCount="indefinite" from="4" to="15" />
+              <animate attributeName="fill-opacity" begin="0s" dur="1.5s" repeatCount="indefinite" from="1" to=".5" />
+            </circle>
+          </svg>
+        </div>
+      </div>
+
+      <!-- 姿勢 -->
+      <div id="posture_wrapper" class="wrapper"></div>
+
+      <!-- グラフ -->
+      <div id="graph_wrapper" class="wrapper"></div>
+    </div>
+
+    <!-- 全画面表示用のボタン -->
+    <button id="goFS">Fullscreen</button>
+
+    <!-- アラート音 -->
+    <!-- preloadで予めロード。loopはスマホブラウザだと動かないという情報もあり。loopは論理型の属性 -->
+    <audio id="warning_sound" preload="auto" loop>
+      <!-- <source>タグは、動画や音声などのメディアファイルのURLや種類を指定する際に、<video>～</video>などのメディア要素の中で子要素として使用します。 <source>は、それ自身では何も表しません。 -->
+      <!-- wavファイルが再生できないデバイスの場合、mp3ファイルが再生される。 -->
+      <source src="./sounds/warning.wav" type="audio/wav">
+      <source src="./sounds/warning.mp3" type="audio/mp3">
+    </audio>
+    <audio id="danger_sound" preload="auto" loop>
+      <source src="./sounds/danger.wav" type="audio/wav">
+      <source src="./sounds/danger.mp3" type="audio/mp3">
+    </audio>
+
+    <!-- type="module" さえあれば、HTMLに埋め込まれたスクリプトでモジュールをインポートして使うこともできます。 -->
+    <!-- ただし、このままではCORSエラーが発生する。なぜなら、多くのブラウザでは、JavaScriptを使用してローカルファイルシステム上のファイルにアクセスできません（HTMLドキュメントがローカルファイルシステム上にもある場合でも）。 -->
+    <!-- importで他のJSファイルを読み込むことが、これに当たるようである。 -->
+    <!-- 戦略としては、複数scriptタグを用意する方法で行こうと思う。 -->
+    <script src="./js/threeJS/three.min.js"></script>
+    <script src="./js/threeJS/OrbitControls.js"></script>
+    <script type="module" src="./js/main.js" charset="UTF-8"></script>
+  </body>
+
+</html>

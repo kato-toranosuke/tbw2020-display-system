@@ -1,0 +1,247 @@
+@charset 'utf-8';
+
+/* CSS Custom Property */
+:root
+{
+    --window-width: 100vw;
+    --window-height: 100vh;
+}
+
+/* ブラウザで初期設定されている余白を消す */
+*
+{
+    margin: 0;
+    padding: 0;
+}
+
+/* 全体を覆うcontainer */
+#container
+{
+    display: grid;
+    /* width: 100vw;
+    height: 100vh; */
+
+    width: var(--window-width);
+    height: var(--window-height);
+}
+
+/* 各要素を囲むwrapper */
+.wrapper
+{
+    position: relative;
+
+    display: none;
+}
+/* ラベル */
+.label
+{
+    /* font-size: 2vh; */
+    font-size: calc(var(--window-height) * .02);
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    color: white;
+}
+
+/* 高度Bar */
+#alt_barmeter_wrapper
+{
+    position: relative;
+}
+#alt_barmeter_wrapper > .present_val
+{
+    position: absolute;
+    z-index: 10;
+}
+
+.tachometer
+{
+    position: absolute;
+    bottom: 0;
+
+    display: block;
+
+    justify-self: center;
+}
+
+#map_wrapper
+{
+    background-color: tomato;
+}
+
+/* グラフ */
+#graph_wrapper
+{
+    background-color: gray;
+}
+
+/* 何も表示しない */
+@media screen and (max-width: 320px)
+{
+}
+
+/* スマホ版 */
+/* @media screen and (max-width: 560px) */
+@media screen and (max-width: 860px)
+{
+    #container
+    {
+        /* grid-template-rows: minmax(calc(100vh - 50vw), 70vh) minmax(60px, 50vw);
+        grid-template-columns: 1fr 2fr 50vw; */
+        grid-template-rows: minmax(calc(var(--window-height) - (var(--window-width)/2)), calc(var(--window-height)*.7)) minmax(60px, calc(var(--window-width) / 2));
+        grid-template-columns: 1fr 2fr 50vw;
+        grid-template-areas: 'areaA areaB areaB'
+        'areaC areaC areaD';
+    }
+    #alt_barmeter_wrapper
+    {
+        display: block;
+
+        grid-area: areaA;
+    }
+    #map_wrapper
+    {
+        display: block;
+
+        grid-area: areaB;
+    }
+    #aspd_tachometer_wrapper
+    {
+        display: block;
+
+        grid-area: areaC;
+    }
+    #rpm_tachometer_wrapper
+    {
+        display: block;
+
+        grid-area: areaD;
+    }
+    /* ラベルを非表示にする */
+    .label
+    {
+        display: none;
+    }
+}
+
+/* タブレット版 */
+@media screen and (max-width: 960px)
+{
+    #container
+    {
+        /* grid-template-rows: 1fr calc(33vw + 30px) minmax(100px, 20vh);
+        grid-template-columns: 10.4vw 23vw 22.3vw 11vw 33.3vw; */
+        grid-template-rows: 1fr calc(var(--window-width) * .33 + 30px) minmax(100px, calc(var(--window-height) * .2));
+        grid-template-columns: calc(var(--window-width) * .104) calc(var(--window-width) * .23) calc(var(--window-width) * .223) calc(var(--window-width) * .11) calc(var(--window-width) * .333);
+        grid-template-areas: 'areaA areaB areaB areaC areaC'
+        'areaD areaD areaE areaE areaF'
+        'areaG areaG areaG areaG areaG';
+    }
+    #alt_barmeter_wrapper
+    {
+        display: block;
+
+        grid-area: areaA;
+    }
+    #map_wrapper
+    {
+        display: block;
+
+        grid-area: areaB;
+    }
+    #posture_wrapper
+    {
+        display: block;
+
+        grid-area: areaC;
+    }
+    #aspd_tachometer_wrapper
+    {
+        display: block;
+
+        grid-area: areaD;
+    }
+    #gspd_tachometer_wrapper
+    {
+        display: block;
+
+        grid-area: areaE;
+    }
+    #rpm_tachometer_wrapper
+    {
+        display: block;
+
+        grid-area: areaF;
+    }
+    #graph_wrapper
+    {
+        display: block;
+
+        grid-area: areaG;
+    }
+    /* ラベル */
+    .label
+    {
+        display: block;
+    }
+}
+
+/* PC版 */
+@media screen and (min-width: 960px)
+{
+    #container
+    {
+        /* grid-template-rows: 33vh 33vh 34vh;
+        grid-template-columns: minmax(50px, 10vw) 1fr 1fr minmax(100px, 33vh); */
+        grid-template-rows: calc(var(--window-height) * .33) calc(var(--window-height) * .33) calc(var(--window-height) * .34);
+        grid-template-columns: minmax(50px, calc(var(--window-width) * .1)) 1fr 1fr minmax(100px, calc(var(--window-height) * .33));
+        grid-template-areas: 'areaA areaB areaC areaD'
+        'areaA areaB areaC areaE'
+        'areaF areaF areaF areaG';
+    }
+
+    #alt_barmeter_wrapper
+    {
+        display: block;
+
+        grid-area: areaA;
+    }
+    #map_wrapper
+    {
+        display: block;
+
+        grid-area: areaB;
+    }
+    #posture_wrapper
+    {
+        display: block;
+
+        grid-area: areaC;
+    }
+    #aspd_tachometer_wrapper
+    {
+        display: block;
+
+        grid-area: areaD;
+    }
+    #gspd_tachometer_wrapper
+    {
+        display: block;
+
+        grid-area: areaE;
+    }
+    #graph_wrapper
+    {
+        display: block;
+
+        grid-area: areaF;
+    }
+    #rpm_tachometer_wrapper
+    {
+        display: block;
+
+        grid-area: areaG;
+    }
+}
