@@ -56,8 +56,8 @@ export class Map extends GeneralFuncs {
 
   init() {
     // ------- 定数 --------
-    this.warning_val_range = [{ r: { min: 0, max: 0 }, g: { min: 255, max: 255 }, b: { min: 0, max: 0 }, a: { min: 1, max: 1 } }];
-    this.danger_val_range = [{ r: { min: 255, max: 255 }, g: { min: 0, max: 0 }, b: { min: 0, max: 0 }, a: { min: 1, max: 1 } }];
+    this.warning_val_range = [{ r: { min: 0, max: 0 }, g: { min: 255, max: 255 }, b: { min: 0, max: 0 }, a: { min: 0, max: 255 } }];
+    this.danger_val_range = [{ r: { min: 255, max: 255 }, g: { min: 0, max: 0 }, b: { min: 0, max: 0 }, a: { min: 0, max: 255 } }];
 
     // ------- map_layer -------
     // canvas要素を取得・設定。
@@ -98,6 +98,15 @@ export class Map extends GeneralFuncs {
     const map_img_height = this.map_img.height;
     // drawImageの解説：http://www.htmq.com/canvas/drawImage_s.shtml
     this.context.drawImage(this.map_img, 0, 0, map_img_width, map_img_height, 0, 0, this.width, this.height);
+
+    this.context.beginPath();
+    this.context.rect(0, 0, this.width, this.height);
+    this.context.fillStyle = "rgba(0,255,0,0.8)";
+    this.context.fill();
+
+    this.context.strokeStyle = "purple";
+    this.context.lineWidth = 8;
+    this.context.stroke();
   }
 
   // 円の描画
@@ -123,6 +132,7 @@ export class Map extends GeneralFuncs {
   }
 
   updateValue(x, y) {
+    console.log(`x:${x}, y:${y}`);
     // 最大表示数を超えたら削除
     if (this.points.children.length >= this.max_points_num)
       this.points.removeChild(this.points.firstChild);
@@ -132,7 +142,7 @@ export class Map extends GeneralFuncs {
     const imgdata = this.context.getImageData(x, y, 1, 1);
     // RGBA値を格納
     const pixel_data = { r: imgdata.data[0], g: imgdata.data[1], b: imgdata.data[2], a: imgdata.data[3] };
-    console.log(pixel_data);
+    // console.log(pixel_data);
     this.checkAlert(pixel_data, this.present_effect, this.map_wrapper_node_id, this.danger_val_range, 'map');
 
     this.drawPoint(x, y, 5);

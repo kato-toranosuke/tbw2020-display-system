@@ -1,13 +1,15 @@
 'use strict';
 
 export class GeneralFuncs {
+  static is_playing_alert = { altitude: false, map: false };
+  static warning_sound = document.getElementById('warning_sound');
+  static danger_sound = document.getElementById('danger_sound');
+  static is_ok_playing_alert = false;
+
   constructor() {
     this.normal_color = 'skyblue';
     this.warning_color = 'orange';
     this.danger_color = 'tomato';
-
-    this.warning_sound = document.getElementById('warning_sound');
-    this.danger_sound = document.getElementById('danger_sound');
   }
 
   normalizeValue(val, maxVal, minVal) {
@@ -19,14 +21,53 @@ export class GeneralFuncs {
       return val;
   }
 
-  playAlert(alert_node) {
-    if (alert_node.paused)
-      alert_node.play();
+  playAlert(alert_type, target) {
+    if (GeneralFuncs.is_ok_playing_alert) {
+      switch (alert_type) {
+        case 'warning':
+          // 危険音がなっていたら、再生しない
+          if (GeneralFuncs.warning_sound.paused && GeneralFuncs.danger_sound.paused) {
+            GeneralFuncs.warning_sound.play();
+            GeneralFuncs.is_playing_alert[target] = true;
+          }
+          break;
+        case 'danger':
+          if (GeneralFuncs.danger_sound.paused) {
+            this.pauseAlert('warning');
+            GeneralFuncs.danger_sound.play();
+            GeneralFuncs.is_playing_alert[target] = true;
+          }
+          break;
+        default:
+          break;
+      }
+    }
   }
 
-  pauseAlert(alert_node) {
-    if (!alert_node.paused)
-      alert_node.pause();
+  pauseAlert(alert_type, target) {
+    // 他のtergetのalertが再生されていれば、停止しない
+    const keys = Object.keys(GeneralFuncs.is_playing_alert).filter(val => val != target);
+    for (const key of keys) {
+      if (GeneralFuncs.is_playing_alert[key] === true)
+        return;
+    }
+
+    switch (alert_type) {
+      case 'warning':
+        if (!GeneralFuncs.warning_sound.paused) {
+          GeneralFuncs.warning_sound.pause();
+          GeneralFuncs.is_playing_alert[target] = false;
+        }
+        break;
+      case 'danger':
+        if (!GeneralFuncs.danger_sound.paused) {
+          GeneralFuncs.danger_sound.pause();
+          GeneralFuncs.is_playing_alert[target] = false;
+        }
+        break;
+      default:
+        break;
+    }
   }
 
   checkAlert(val, target_node, warning_val_ranges, danger_val_ranges, mode) {
@@ -35,8 +76,8 @@ export class GeneralFuncs {
         // 警告範囲のチェック
         for (const warning_val_range of warning_val_ranges) {
           if (val >= warning_val_range.min && val <= warning_val_range.max) {
-            this.pauseAlert(this.danger_sound);
-            this.playAlert(this.warning_sound);
+            this.pauseAlert('danger', 'altitude');
+            this.playAlert('warning', 'altitude');
             target_node.setAttribute('fill', this.warning_color);
             return;
           }
@@ -45,21 +86,20 @@ export class GeneralFuncs {
         // 危険範囲のチェック
         for (const danger_val_range of danger_val_ranges) {
           if (val >= danger_val_range.min && val <= danger_val_range.max) {
-            this.pauseAlert(this.warning_sound);
-            this.playAlert(this.danger_sound);
+            this.pauseAlert('warning', 'altitude');
+            this.playAlert('danger', 'altitude');
             target_node.setAttribute('fill', this.danger_color);
             return;
           }
         }
 
         // 通常時
-        this.pauseAlert(this.warning_sound);
-        this.pauseAlert(this.danger_sound);
+        this.pauseAlert('warning', 'altitude');
+        this.pauseAlert('danger', 'altitude');
         target_node.setAttribute('fill', this.normal_color);
         break;
 
       case 'map':
-        // warning_val_ranges = [{r:{min: 0, max: 10}, b:{min: 0, max: 10}}]
         // 警告範囲のチェック
         for (const warning_val_range of warning_val_ranges) {
           let flag = 1;
@@ -73,14 +113,17 @@ export class GeneralFuncs {
           }
 
           if (flag === 1) {
-            this.pauseAlert(this.danger_sound);
-            this.playAlert(this.warning_sound);
+            this.pauseAlert('danger', 'map');
+            this.playAlert('warning', 'map');
             // target_node.setAttribute('fill', this.warning_color);
             return;
           }
         }
 
         // 危険範囲のチェック
+        // console.log(warning_val_ranges);
+        // console.log(danger_val_ranges);
+        // console.log(val);
         for (const danger_val_range of danger_val_ranges) {
           let flag = 1;
           // r,g,b,aを取得する
@@ -93,19 +136,19 @@ export class GeneralFuncs {
           }
 
           if (flag === 1) {
-            this.pauseAlert(this.warning_sound);
-            this.playAlert(this.danger_sound);
+            this.pauseAlert('warning', 'map');
+            this.playAlert('danger', 'map');
             // target_node.setAttribute('fill', this.warning_color);
             return;
           }
         }
 
         // 通常時
-        this.pauseAlert(this.warning_sound);
-        this.pauseAlert(this.danger_sound);
+        this.pauseAlert('warning', 'map');
+        this.pauseAlert('danger', 'map');
         // target_node.setAttribute('fill', this.normal_color);
         break;
-      
+
       default:
         break;
     }

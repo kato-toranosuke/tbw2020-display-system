@@ -3,10 +3,9 @@ import { BarMeter } from './barmeter.js';
 import { TachoMeter } from './tachometer.js';
 import { Map } from './map.js';
 import { Posture } from './posture.js';
-import { GeneralFuncs } from './generalFuncs.js';
+import { GeneralFuncs} from './generalFuncs.js';
 
 let map, alt_barmeter, aspd_tachometer, gspd_tachometer, rpm_tachometer, posture;
-let datasets = [];
 
 // 画面読み込み完了時に発動
 window.onload = async function () {  
@@ -20,7 +19,7 @@ window.onload = async function () {
   setInterval(function () {
     const dataset = createValues();
     updateValues(dataset);
-   }, 1000);
+   }, 1500);
 };
 
 // update
@@ -45,6 +44,21 @@ function updateNodeSize() {
   aspd_tachometer.init();
   gspd_tachometer.init();
   rpm_tachometer.init();
+}
+
+// アラート音設定
+const alert_switch = document.getElementById('alert_switch');
+alert_switch.addEventListener('click', audioPlay);
+function audioPlay() {
+  if (!GeneralFuncs.is_ok_playing_alert) {
+    document.getElementById('warning_sound').play();
+    document.getElementById('danger_sound').play();
+    GeneralFuncs.is_ok_playing_alert = true;
+    alert_switch.innerText = 'Alert OFF';
+  } else {
+    GeneralFuncs.is_ok_playing_alert = false;
+    alert_switch.innerText = 'Alert ON';
+  }
 }
 
 // 全画面表示
