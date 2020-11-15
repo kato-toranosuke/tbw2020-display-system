@@ -97,7 +97,7 @@
       {
           display: grid;
           /* width: 100vw;
-                                                                                                                                                                                                                                                                                  height: 100vh; */
+                                                                                                                                                                                                                                                    height: 100vh; */
 
           width: var(--window-width);
           height: var(--window-height);
@@ -154,8 +154,8 @@
 
       /* 何も表示しない */
       /* @media screen and (max-width: 320px)
-                                                                                                                                                                                                      {
-                                                                                                                                                                                                      } */
+                                                                                                                                                                        {
+                                                                                                                                                                        } */
 
       /* スマホ版 */
       @media screen and (max-width: 320px)
@@ -163,7 +163,7 @@
           #container
           {
               /* grid-template-rows: minmax(calc(100vh - 50vw), 70vh) minmax(60px, 50vw);
-                                                                                                                                                                                                                                                                                      grid-template-columns: 1fr 2fr 50vw; */
+                                                                                                                                                                                                                                                        grid-template-columns: 1fr 2fr 50vw; */
               grid-template-rows: minmax(calc(var(--window-height) - (var(--window-width)/2)), calc(var(--window-height)*.7)) minmax(60px, calc(var(--window-width) / 2));
               grid-template-columns: 1fr 2fr 50vw;
               grid-template-areas: 'areaA areaB areaB'
@@ -211,7 +211,7 @@
           #container
           {
               /* grid-template-rows: 1fr calc(33vw + 30px) minmax(100px, 20vh);
-                                                                                                                                                                                                                                                                                      grid-template-columns: 10.4vw 23vw 22.3vw 11vw 33.3vw; */
+                                                                                                                                                                                                                                                        grid-template-columns: 10.4vw 23vw 22.3vw 11vw 33.3vw; */
               grid-template-rows: 1fr calc(var(--window-width) * .33 + 30px) minmax(100px, calc(var(--window-height) * .2));
               grid-template-columns: calc(var(--window-width) * .104) calc(var(--window-width) * .23) calc(var(--window-width) * .223) calc(var(--window-width) * .11) calc(var(--window-width) * .333);
               grid-template-areas: 'areaA areaB areaB areaC areaC'
@@ -281,7 +281,7 @@
           #container
           {
               /* grid-template-rows: 33vh 33vh 34vh;
-                                                                                                                                                                                                                                                                                      grid-template-columns: minmax(50px, 10vw) 1fr 1fr minmax(100px, 33vh); */
+                                                                                                                                                                                                                                                        grid-template-columns: minmax(50px, 10vw) 1fr 1fr minmax(100px, 33vh); */
               grid-template-rows: calc(var(--window-height) * .33) calc(var(--window-height) * .33) calc(var(--window-height) * .34);
               grid-template-columns: minmax(50px, calc(var(--window-width) * .1)) 1fr 1fr minmax(100px, calc(var(--window-height) * .33));
               grid-template-areas: 'areaA areaB areaC areaD'
@@ -530,7 +530,7 @@
 
                 circle:last-of-type
                 {
-                    fill: black;
+                    fill: red;
                     stroke: none;
                 }
 
@@ -847,8 +847,7 @@
           val = this.normalizeValue(val, this.maxVal, this.minVal); // 値の正規化
           this.checkAlert(val, this.bar, this.warning_val_ranges, this.danger_val_ranges, 'altitude');
 
-          // this.present_val.children[0].textContent = val.toFixed(2); // 数値部の表示
-          this.present_val.children[0].textContent = val; // 数値部の表示
+          this.present_val.children[0].textContent = val.toFixed(2); // 数値部の表示
           // Barの表示
           this.bar.setAttribute('y', this.tmpY(val, this.maxVal, this.minVal));
           this.bar.setAttribute('height', -this.tmpY(val, this.maxVal, this.minVal));
@@ -925,8 +924,7 @@
           const presentAng = this.calcAngle(val, this.maxVal, this.minVal);
 
           // 数値の表示
-          // this.present_val.textContent = val.toFixed(1);
-          this.present_val.textContent = val;
+          this.present_val.textContent = val.toFixed(1);
           // メーターの扇型の設定
           // d="M{中心座標} L{円弧始め座標} A{半径} {回転角（傾き）} {if 180度以下 0 else 1} {if 反時計回り 0 else 1} {円弧終り座標}z"
           const settings = `M0,0 L${-this.r * Math.sin(this.initAng)},${this.r * Math.cos(this.initAng)} A${this.r},${this.r} 0 ${(presentAng <= (Math.PI + this.initAng)) ? 0 : 1} 1 ${-this.r * Math.sin(presentAng)},${this.r * Math.cos(presentAng)}z`;
@@ -1060,8 +1058,8 @@
           const cy = this.height * (1 - ((y - this.coordinate.sounth_lat) / (this.coordinate.north_lat - this.coordinate.sounth_lat)));
 
           const point = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-          point.setAttributeNS(null, "cx", cx);
-          point.setAttributeNS(null, "cy", cy);
+          point.setAttributeNS(null, "cx", x);
+          point.setAttributeNS(null, "cy", y);
           // point.setAttributeNS(null, "cy", -y); 本当はこれ
           point.setAttributeNS(null, "r", r);
 
@@ -1244,46 +1242,6 @@
 
       let map, alt_barmeter, aspd_tachometer, gspd_tachometer, rpm_tachometer, posture;
 
-      // JSONからの情報を取得
-      function display() {
-        let dataset = {};
-        try {
-          let httpRequest = new XMLHttpRequest();
-          if (!httpRequest) {
-            console.log("XMLHttpRequestインスタンスを生成出来ませんでした。");
-            return false;
-          }
-
-          httpRequest.onload = function () {
-            if (this.status === 200) {
-              if (this.response) {
-                const res_text = this.responseText;
-                const res_obj = JSON.parse(res_text);
-                // toFix(n)で固定小数点表記可能
-                dataset.alt = Number(res_obj.height) / 100;
-                dataset.rpm = Number(res_obj.rpm);
-                dataset.gspd = Number(res_obj.gspd);
-                dataset.aspd = Number(res_obj.aspd);
-                dataset.lat = Number(res_obj.lat);
-                dataset.lng = Number(res_obj.lng);
-                dataset.roll = Number(res_obj.roll);
-                dataset.pitch = Number(res_obj.pitch);
-                dataset.yaw = Number(res_obj.yaw);
-              }
-            }
-          }
-          httpRequest.open('GET', 'http://192.168.4.1/data', true);
-          //httpRequest.responseType = 'json';
-          // httpRequest.setRequestHeader('Content-Type', 'application/json');
-          httpRequest.setRequestHeader('Content-Type', 'text/plain');
-          httpRequest.send(null);
-        } catch (e) {
-          console.log(e.message);
-          console.log(e.stack);
-        }
-        return dataset;
-      }
-
       // 画面読み込み完了時に発動
       window.onload = async function () {
         alt_barmeter = new BarMeter('alt_barmeter', 'alt_barmeter_wrapper');
@@ -1294,9 +1252,9 @@
         posture = new Posture('posture_wrapper');
 
         setInterval(function () {
-          const dataset = display();
+          const dataset = createValues();
           updateValues(dataset);
-        }, 1000);
+        }, 100);
       };
 
       // update
@@ -1363,6 +1321,23 @@
         }
       }
       goFS_node.addEventListener('click', toggleFullScreen, false);
+
+      function createValues() {
+        let dataset = {};
+        dataset.alt = Math.random() * (alt_barmeter.maxVal - alt_barmeter.minVal) + alt_barmeter.minVal;
+        // dataset.lat = Math.random() * (map.coordinate.sounth_lat - map.coordinate.north_lat);
+        dataset.lat = Math.random() * 387.9;
+        // dataset.lng = Math.random() * (map.coordinate.east_lng - map.coordinate.west_lng);
+        dataset.lng = Math.random() * 757;
+        dataset.roll = Math.random() * Math.PI * 2;
+        dataset.pitch = Math.random() * Math.PI * 2;
+        dataset.yaw = Math.random() * Math.PI * 2;
+        dataset.aspd = Math.random() * (aspd_tachometer.maxVal - aspd_tachometer.minVal) + aspd_tachometer.minVal;
+        dataset.gspd = Math.random() * (gspd_tachometer.maxVal - gspd_tachometer.minVal) + gspd_tachometer.minVal;
+        dataset.rpm = Math.random() * (rpm_tachometer.maxVal - rpm_tachometer.minVal) + rpm_tachometer.minVal;
+        dataset.time = new Date();
+        return dataset;
+      }
     </script>
   </body>
 

@@ -48,7 +48,6 @@ function updateNodeSize() {
 
 // アラート音設定
 const alert_switch = document.getElementById('alert_switch');
-alert_switch.addEventListener('click', audioPlay);
 function audioPlay() {
   if (!GeneralFuncs.is_ok_playing_alert) {
     document.getElementById('warning_sound').play();
@@ -60,6 +59,7 @@ function audioPlay() {
     alert_switch.innerText = 'Alert ON';
   }
 }
+alert_switch.addEventListener('click', audioPlay, false);
 
 // 全画面表示
 const goFS_node = document.getElementById("goFS");
