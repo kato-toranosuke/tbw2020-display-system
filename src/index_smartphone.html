@@ -13,193 +13,166 @@
     <!-- Chrome for Android -->
     <meta name="mobile-web-app-capable" content="yes">
     <!-- Chrome、Opera、Firefox、Samsung(manifestでの対応の場合) -->
-    <link rel="manifest" href="./manifest.json">
+    <!-- <link rel="manifest" href="./manifest.json"> -->
 
     <!-- cssの読み込み -->
+    <!-- structure.css -->
+    <style type="text/css">
+      /* CSS Custom Property */
+      :root {
+        --window-width: 100vw;
+        --window-height: 100vh;
+      }
+
+      /* ブラウザで初期設定されている余白を消す */
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      /* 全体を覆うcontainer */
+      #container {
+        display: grid;
+        /* width: 100vw;
+          height: 100vh; */
+        width: var(--window-width);
+        height: var(--window-height);
+      }
+
+      /* 各要素を囲むwrapper */
+      .wrapper {
+        position: relative;
+
+        display: none;
+      }
+
+      /* ラベル */
+      .label {
+        /* font-size: 2vh; */
+        font-size: calc(var(--window-height) * .02);
+
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        color: white;
+      }
+
+      /* 高度Bar */
+      #alt_barmeter_wrapper {
+        position: relative;
+      }
+
+      #alt_barmeter_wrapper>.present_val {
+        position: absolute;
+        z-index: 10;
+      }
+
+      /* map */
+      .map_layer {}
+
+      /* tachometer */
+      .tachometer {
+        position: absolute;
+        bottom: 0;
+
+        display: block;
+
+        justify-self: center;
+      }
+
+      /* スマホ版 */
+      @media screen {
+        #container {
+          /* grid-template-rows: minmax(calc(100vh - 50vw), 70vh) minmax(60px, 50vw);
+                                                                                                                                                                                                                                                                                                                                          grid-template-columns: 1fr 2fr 50vw; */
+          grid-template-rows: minmax(calc(var(--window-height) - (var(--window-width)/2)), calc(var(--window-height)*.7)) minmax(60px, calc(var(--window-width) / 2));
+          grid-template-columns: 1fr 2fr 50vw;
+          grid-template-areas: 'areaA areaB areaB'
+            'areaC areaC areaD';
+        }
+
+        #alt_barmeter_wrapper {
+          display: block;
+
+          grid-area: areaA;
+        }
+
+        #map_wrapper {
+          background-color: black;
+          display: block;
+
+          grid-area: areaB;
+        }
+
+        #aspd_tachometer_wrapper {
+          display: block;
+
+          grid-area: areaC;
+        }
+
+        #rpm_tachometer_wrapper {
+          display: block;
+
+          grid-area: areaD;
+        }
+
+        /* ラベルを非表示にする */
+        .label {
+          display: none;
+        }
+      }
+    </style>
     <!-- main.css -->
     <style type="text/css">
-      body
-      {
-          font-family: monospace;
+      body {
+        font-family: monospace;
 
-          background-color: black;
-          /* font-family: monospace; */
+        background-color: black;
+        /* font-family: monospace; */
       }
 
       /* 高度バーのアニメーション */
-      .bar
-      {
-          transition-timing-function: ease-out;
-          transition-duration: .5s;
-          transition-property: height y;
+      .bar {
+        transition-timing-function: ease-out;
+        transition-duration: .5s;
+        transition-property: height y;
       }
 
-      .bar-text
-      {
-          font-family: Arial, Helvetica, sans-serif;
+      .bar-text {
+        font-family: Arial, Helvetica, sans-serif;
 
-          color: white;
+        color: white;
 
-          stroke: none;
-          text-anchor: start;
-          /* 横方向の位置 */
+        stroke: none;
+        text-anchor: start;
+        /* 横方向の位置 */
       }
 
       /* Map */
-      .map
-      {
-          position: relative;
+      .map {
+        position: relative;
       }
 
-      .map > *
-      {
-          position: absolute;
+      .map>* {
+        position: absolute;
       }
 
-      button
-      {
-          font-size: 2vh;
-          font-weight: 700;
+      button {
+        font-size: 2vh;
+        font-weight: 700;
 
-          width: 100vw;
-          height: 5vh;
+        width: 100vw;
+        height: 5vh;
       }
 
       /* 全画面表示時の挙動 */
       /* ユーザーがホーム画面からサイトを起動した場合は、display-mode メディアクエリがウェブアプリマニフェストで定義した状態に設定されます。完全な全画面表示の場合は、次のようになります。 */
-      @media all and (display-mode: fullscreen)
-      {
-          #goFS
-          {
-              /* display: none; */
-          }
+      @media all and (display-mode: fullscreen) {
+        #goFS {
+          /* display: none; */
+        }
       }
-
-    </style>
-    <!-- structure.css -->
-    <style type="text/css">
-      /* CSS Custom Property */
-      :root
-      {
-          --window-width: 100vw;
-          --window-height: 100vh;
-      }
-
-      /* ブラウザで初期設定されている余白を消す */
-      *
-      {
-          margin: 0;
-          padding: 0;
-      }
-
-      /* 全体を覆うcontainer */
-      #container
-      {
-          display: grid;
-          /* width: 100vw;
-                                                                                                                                                                                                                                                                                                                                  height: 100vh; */
-
-          width: var(--window-width);
-          height: var(--window-height);
-      }
-
-      /* 各要素を囲むwrapper */
-      .wrapper
-      {
-          position: relative;
-
-          display: none;
-      }
-
-      /* ラベル */
-      .label
-      {
-          /* font-size: 2vh; */
-          font-size: calc(var(--window-height) * .02);
-
-          position: absolute;
-          top: 0;
-          left: 0;
-
-          color: white;
-      }
-
-      /* 高度Bar */
-      #alt_barmeter_wrapper
-      {
-          position: relative;
-      }
-
-      #alt_barmeter_wrapper > .present_val
-      {
-          position: absolute;
-          z-index: 10;
-      }
-
-      .tachometer
-      {
-          position: absolute;
-          bottom: 0;
-
-          display: block;
-
-          justify-self: center;
-      }
-
-      /* グラフ */
-      #graph_wrapper
-      {
-          background-color: gray;
-      }
-
-      /* スマホ版 */
-      @media screen
-      {
-          #container
-          {
-              /* grid-template-rows: minmax(calc(100vh - 50vw), 70vh) minmax(60px, 50vw);
-                                                                                                                                                                                                                                                                                                                                      grid-template-columns: 1fr 2fr 50vw; */
-              grid-template-rows: minmax(calc(var(--window-height) - (var(--window-width)/2)), calc(var(--window-height)*.7)) minmax(60px, calc(var(--window-width) / 2));
-              grid-template-columns: 1fr 2fr 50vw;
-              grid-template-areas: 'areaA areaB areaB'
-              'areaC areaC areaD';
-          }
-
-          #alt_barmeter_wrapper
-          {
-              display: block;
-
-              grid-area: areaA;
-          }
-
-          #map_wrapper
-          {
-              display: block;
-
-              grid-area: areaB;
-          }
-
-          #aspd_tachometer_wrapper
-          {
-              display: block;
-
-              grid-area: areaC;
-          }
-
-          #rpm_tachometer_wrapper
-          {
-              display: block;
-
-              grid-area: areaD;
-          }
-
-          /* ラベルを非表示にする */
-          .label
-          {
-              display: none;
-          }
-      }
-
     </style>
   </head>
 
@@ -217,15 +190,13 @@
         <svg viewBox="0 -1200 400 1200" id="alt_barmeter">
           <defs>
             <style>
-              .bar-text
-              {
-                  font-family: Arial, Helvetica, sans-serif;
+              .bar-text {
+                font-family: Arial, Helvetica, sans-serif;
 
-                  fill: white;
-                  stroke: none;
-                  text-anchor: start;
+                fill: white;
+                stroke: none;
+                text-anchor: start;
               }
-
             </style>
           </defs>
 
@@ -267,15 +238,13 @@
         <svg width="400" height="400" viewBox="-100 -100 200 200" id="aspd_tachometer" class="tachometer">
           <defs>
             <style>
-              .tacho-text
-              {
-                  font-family: Arial, Helvetica, sans-serif;
+              .tacho-text {
+                font-family: Arial, Helvetica, sans-serif;
 
-                  text-anchor: middle;
-                  fill: white;
-                  stroke: none;
+                text-anchor: middle;
+                fill: white;
+                stroke: none;
               }
-
             </style>
           </defs>
 
@@ -306,15 +275,13 @@
         <svg width="400" height="400" viewBox="-100 -100 200 200" id="gspd_tachometer" class="tachometer">
           <defs>
             <style>
-              .tacho-text
-              {
-                  font-family: Arial, Helvetica, sans-serif;
+              .tacho-text {
+                font-family: Arial, Helvetica, sans-serif;
 
-                  text-anchor: middle;
-                  fill: white;
-                  stroke: none;
+                text-anchor: middle;
+                fill: white;
+                stroke: none;
               }
-
             </style>
           </defs>
 
@@ -345,15 +312,13 @@
         <svg width="400" height="400" viewBox="-100 -100 200 200" id="rpm_tachometer" class="tachometer">
           <defs>
             <style>
-              .tacho-text
-              {
-                  font-family: Arial, Helvetica, sans-serif;
+              .tacho-text {
+                font-family: Arial, Helvetica, sans-serif;
 
-                  text-anchor: middle;
-                  fill: white;
-                  stroke: none;
+                text-anchor: middle;
+                fill: white;
+                stroke: none;
               }
-
             </style>
           </defs>
 
@@ -379,104 +344,40 @@
       <!-- map -->
       <div id="map_wrapper" class="wrapper">
         <div class="map" id="map">
-          <svg version="1.1" id="レイヤー_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 962 491.8" style="enable-background:new 0 0 962 491.8;" xml:space="preserve" class="map_layer">
-            <style type="text/css">
-              .st0
-              {
-                  fill: #33c7ac;
-              }
-
-              .st1
-              {
-                  fill: #fff;
-              }
-
-              .st2
-              {
-                  fill: #33d8d8;
-              }
-
-            </style>
-            <rect id="背景" width="962" height="492.8" />
-            <path class="st0" d="M153.5,433.1l-22.4,0.8l0,0c-3.2,0.1-6.5,0.2-9.7,0.3c-6.1,0.2-12.3-0.3-18.2,0.9c-22.9,4.6-45.7,9.7-68.6,14.7
-          	c-3.5,0.8-3.5,0.8-2.4,4.4c0.1,0.5,0.3,1,0.4,1.5l0,0c1.3,8.2,3.4,16.2,4.9,24.4c0.4,1.9,1.1,2.1,2.8,1.6
-          	c11.8-3.4,23.6-6.7,35.4-10.1l122.2-35l4.1-1.4c1.2-0.1,2.4-0.4,3.5-1l0,0c4-0.8,8-2,11.8-3.5c-2.2,0.1-4.4,0.2-6.6,0.3L153.5,433.1
-          	z M100.6,439.6L100.6,439.6z" />
-            <path class="st0" d="M217.6,430.8h-0.1H217.6L217.6,430.8z" />
-            <g id="飛行場">
-              <path class="st0"
-                d="M941.3,70.4c-1.2-3.6-2.3-7.3-3.5-10.9c-4.9-15.6-9.7-31.2-14.6-46.8c-0.5-1.6-1.3-1.8-2.7-1.2
-          		c-2.1,1-4.3,1.8-6.4,2.7c-25.8,10.6-51.6,21.1-77.4,31.6c-24.1,9.9-48.2,19.7-72.3,29.5C738.7,85.9,713,96.4,687.3,107
-          		c-24.8,10.1-49.6,20.3-74.4,30.4c-25.6,10.5-51.1,20.9-76.7,31.4c-27.8,11.4-55.6,22.7-83.4,34.1c-22.7,9.3-45.4,18.6-68.1,27.9
-          		c-24.9,10.2-49.8,20.3-74.6,30.5c-19,7.8-38.1,15.6-57,23.4c-16.8,6.9-33.7,13.7-50.5,20.6c-19.2,7.8-38.4,15.7-57.5,23.6
-          		c-5.1,2.1-10.4,3.9-15.3,6.5c-0.6,0.1-1.3,0.3-1.9,0.5l-56.7,23.2c-17.5,7.1-35,14.3-52.5,21.4c-0.8,0.3-2,0.5-1.6,2
-          		c1,3.9,1.8,7.9,2.6,11.9l0,0c-0.1,0.9,0.1,1.7,0.6,2.5c0.7,3.5,1.3,7,2,10.5c2.5,11.7,5,23.3,7.5,35l0,0l0.1,0.5l0,0
-          		c-0.1,0.5,0.1,1.1,0.4,1.5l0,0v0.5l0,0c-0.2,2.4,0.8,2.9,3,2.4c17.8-3.9,35.6-7.9,53.4-11.6c6.9-1.5,13.6-3.6,20.7-3.9
-          		c7.6-0.2,15.1-0.6,22.7-0.9l10-0.3c8.6-0.2,17.3-0.5,26-0.8c16.6-0.6,33.2-1.3,49.9-1.9c2.5-0.1,2.9,0.6,1.7,3c1.4,0.2,2.7-0.5,4-1
-          		l1.5-0.5c10.5-2.9,21-5.8,31.4-8.8c29.8-8.5,59.7-17.1,89.5-25.6l85.9-24.6l85.5-24.4c16.4-4.7,32.9-9.3,49.3-14
-          		c1.5-0.4,1.9-0.9,1.3-2.4c-0.9-2-1.6-4.2-2.4-6.3c-7.9-20.3-15.8-40.6-23.8-60.9c-0.8-2.2-0.3-3.1,1.7-4c4.4-1.9,8.8-4,13.1-6
-          		c13.7-6.4,27.4-12.9,41.1-19.3c18.6-8.7,37.2-17.3,55.8-25.9c16.1-7.5,32.2-15.1,48.3-22.6c20.9-9.7,41.9-19.5,62.8-29.2
-          		c13.9-6.5,27.8-13.1,41.7-19.6c23.4-10.9,46.9-21.8,70.3-32.7c21.9-10.2,43.7-20.3,65.5-30.5C941.4,72.1,941.7,71.6,941.3,70.4z" />
-              <path class="st0" d="M217.7,430.9L217.7,430.9L217.7,430.9L217.7,430.9z" />
-            </g>
-            <path id="滑走路" class="st1" d="M745,116.6c-2-5.1-3.7-10.3-5.6-15.4c-1.6-4.6-1.6-4.6-6.1-2.8c-22.4,9.2-44.8,18.5-67.2,27.7
-          	c-8.1,3.3-16.1,6.7-24.1,10c-0.2,0-0.3,0-0.5,0.1l0,0c-16,6.6-32.1,13.1-48.1,19.7c-19.4,8-38.8,16-58.2,24
-          	c-19.2,7.9-38.4,15.8-57.6,23.6c-17.5,7.2-35,14.4-52.5,21.6c-13.2,5.4-26.4,10.9-39.5,16.4l0,0c-3.8,1.5-7.6,3-11.3,4.5
-          	c-22.9,9.4-45.8,18.8-68.6,28.2c-20,8.2-40.1,16.4-60.1,24.6c-24.9,10.2-49.8,20.4-74.6,30.6c-1.5,0.6-1.6,1.3-1,2.6
-          	c3.1,6.7,6.2,13.4,9.2,20.2c0.5,1,1,1.3,2.1,0.8c11.6-4.8,23.2-9.6,34.7-14.4l49.7-20.6c14.8-6.1,29.6-12.3,44.4-18.4
-          	c16.4-6.8,32.8-13.6,49.2-20.5c8.8-3.7,17.6-7.4,26.4-11.1l0.5-0.1l0,0c1.9-0.8,3.9-1.5,5.8-2.3l49.7-20.6
-          	c12.8-5.3,25.6-10.6,38.4-15.9l49.2-20.4c14.9-6.2,29.7-12.3,44.6-18.5c16.5-6.8,33-13.7,49.5-20.5c6.3-2.6,12.5-5.3,18.8-8l0,0
-          	c4.6-1.8,9.3-3.6,13.9-5.5c14.3-6,28.7-12,43-17.9c14.9-6.2,29.8-12.3,44.7-18.4C745,119.2,745.7,118.5,745,116.6z" />
-            <path class="st2" d="M961.8,486.8V370.3h0.2V215.9h-1.3c-0.8,0.3-1.7,0.7-2.5,1.1c-9.8,5.6-19.6,11.3-29.4,16.9l-31.1,18l-0.5,0.4
-          	l0,0c-1.1,0.6-2.2,1.1-3.3,1.7c-5,2.8-9.7,6.3-15,8.3c-14.9,5.5-30,10.6-45,15.9c-27.9,9.8-55.7,19.6-83.6,29.4
-          	c-12.3,4.3-24.6,8.5-36.1,14.9c-15.9,8.8-32.2,17-48.4,25.3c-8.4,4.4-16.5,9.2-24.3,14.6l0,0c-0.5,0.2-0.9,0.4-1.3,0.6
-          	c-15,9.5-30,19.2-45,28.6c-6,3.8-11.9,7.9-18.6,10.6c-12.5,5.1-25,10.5-37.4,15.7l-34,14.3l-33.5,14.1l-34,14.3
-          	c-11.3,4.8-22.6,9.6-34,14.4c-3.7,1.5-7.3,3.7-11.5,4s-8.3,0.7-12.4,1.1c-8.4,0.7-16.9,1.3-25.3,2.2c-1.8,0.2-3.8,0.1-5.5,1.2
-          	c-4.4,2.8-8.9,5.4-13.4,8.1c-0.1,0-0.3,0.1-0.4,0.2l0,0c-0.4,0.2-1,0.3-1.1,0.9h622.7c1.7,0,4,0.6,4.8-0.2s0.2-3.1,0.2-4.8V486.8
-          	L961.8,486.8z M931.2,491.8L931.2,491.8L931.2,491.8L931.2,491.8z M960.6,468.3L960.6,468.3L960.6,468.3L960.6,468.3z" />
-          </svg>
+          <img class="map_layer"
+            src="data:image/png;base64,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" />
           <svg class="points_layer" expanded="true">
             <defs>
               <style>
-                circle
-                {
-                    fill: rgb(150, 150, 150);
-                    stroke: white;
+                .points>circle {
+                  fill: rgb(200, 200, 200);
+                  stroke: white;
                 }
 
-                circle:last-of-type
-                {
-                    fill: black;
-                    stroke: none;
+                .points>circle:last-of-type {
+                  fill: red;
+                  stroke: none;
                 }
 
-                .present_effect
-                {
-                    fill: white;
-                    stroke: none;
+                .present_effect {
+                  fill: red;
+                  stroke: none;
                 }
-
               </style>
             </defs>
+            <circle class="present_effect" r="0">
+              <animate attributeName="r" begin="0s" dur="1.5s" repeatCount="indefinite" from="4" to="30" />
+              <animate attributeName="fill-opacity" begin="0s" dur="1.0s" repeatCount="indefinite" from=".8" to=".4" />
+            </circle>
             <g class="points">
             </g>
-            <circle class="present_effect" r="0">
-              <animate attributeName="r" begin="0s" dur="1.5s" repeatCount="indefinite" from="4" to="15" />
-              <animate attributeName="fill-opacity" begin="0s" dur="1.5s" repeatCount="indefinite" from="1" to=".5" />
-            </circle>
           </svg>
         </div>
       </div>
-
-      <!-- 姿勢 -->
-      <div id="posture_wrapper" class="wrapper"></div>
-
-      <!-- グラフ -->
-      <div id="graph_wrapper" class="wrapper"></div>
     </div>
 
     <!-- 全画面表示用のボタン -->
-    <button id="goFS">Fullscreen</button>
+    <!-- <button id="goFS">Fullscreen</button> -->
     <!-- アラームON/OFFボタン -->
     <!-- ChromeとSafariのメディア要素（<video>, <audio>）の自動再生におけるポリシーの変更されaudioタグの自動再生ができなくなりました。 -->
     <button id="alert_switch" type="button">Alert ON</button>
@@ -624,9 +525,6 @@
               }
 
               // 危険範囲のチェック
-              // console.log(warning_val_ranges);
-              // console.log(danger_val_ranges);
-              // console.log(val);
               for (const danger_val_range of danger_val_ranges) {
                 let flag = 1;
                 // r,g,b,aを取得する
@@ -862,7 +760,7 @@
       'use strict';
 
       class Map extends GeneralFuncs {
-        constructor(map_node_id = 'map', map_wrapper_node_id = 'map_wrapper', coordinate = { north_lat: 35.86133, sounth_lat: 35.85704, east_lng: 140.24666, west_lng: 140.23635 }, map_img_name = 'ootone.png') {
+        constructor(map_node_id = 'map', map_wrapper_node_id = 'map_wrapper', coordinate = { north_lat: 35.86070, sounth_lat: 35.85796, east_lng: 140.24447, west_lng: 140.23801 }, map_img_name = 'ootone.png') {
           super();
           this.map_node_id = map_node_id;
           this.map_wrapper_node_id = map_wrapper_node_id;
@@ -883,9 +781,9 @@
           // naturalWidth / naturalHeight -> 表示されているサイズではなく、画像の本来のサイズを取得したい場合
           // const map_img_natural_width = this.map_img.naturalWidth;
           // const map_img_natural_height = this.map_img.naturalHeight;
-          const map_img_natural_width = 962;
-          const map_img_natural_height = 493;
-          const map_img_aspect = map_img_natural_height / map_img_natural_width;
+          this.map_img_natural_width = 631;
+          this.map_img_natural_height = 1205;
+          const map_img_aspect = this.map_img_natural_height / this.map_img_natural_width;
 
           const map_wrapper_width = this.map_wrapper_node.clientWidth;
           const map_wrapper_height = this.map_wrapper_node.clientHeight;
@@ -929,6 +827,7 @@
           // this.map_img.onload = function () {....} とした場合、無名関数内のthisはimg要素自体を表す。
           // 一方、有名関数としてそれを呼び出した場合、thisはMapオブジェクト自体を表す。つまり、bindはなくてもよかった。
           // this.map_img.onload = this.drawMap();
+          this.drawMap();
         }
 
         // マップの描画
@@ -947,21 +846,24 @@
           // this.context.lineWidth = 8;
           // this.context.stroke();
 
+          // ------- map_layer -------
+          // img要素を取得
+          const canvas = document.querySelector(`#${this.map_node_id} > .map_layer`);
+
           // ------- points_layer -------
           // svg要素を取得・設定
           const svg = document.querySelector(`#${this.map_node_id} > .points_layer`);
           svg.setAttribute('width', this.width);
           svg.setAttribute('height', this.height);
-          // svg.setAttribute('viewBox', `${this.coordinate.west_lng} ${-this.coordinate.north_lat} ${Math.abs(this.coordinate.east_lng - this.coordinate.west_lng)} ${Math.abs(this.coordinate.north_lat - this.coordinate.sounth_lat)}`);
+          svg.setAttribute('viewBox', `0 0 ${this.map_img_natural_width}  ${this.map_img_natural_height}`);
           // 現在値表現のNodeを取得
           this.present_effect = document.querySelector(`#${this.map_node_id} > .points_layer > .present_effect`);
           // 地点表示領域の取得
           this.points = document.querySelector(`#${this.map_node_id} > .points_layer > .points`);
           // 最大表示point数を設定
-          this.max_points_num = 100;
+          this.max_points_num = 60;
 
           // ----- 表示位置 ------
-          const canvas = document.querySelector(`#${this.map_node_id} > .map_layer`);
           const top = this.map_wrapper_node.clientHeight - this.height;
           const left = this.map_wrapper_node.clientWidth - this.width;
           canvas.setAttribute('style', `top: ${top}px; left: ${left}px;`);
@@ -969,14 +871,18 @@
         }
 
         // 円の描画
-        drawPoint(x, y, r) {
+        // 緯度：latitude, 経度：longitude
+        drawPoint(lat, lng, r) {
           // 描画座標を計算
-          const cx = this.width * ((x - this.coordinate.west_lng) / (this.coordinate.east_lng - this.coordinate.west_lng));
-          const cy = this.height * (1 - ((y - this.coordinate.sounth_lat) / (this.coordinate.north_lat - this.coordinate.sounth_lat)));
+          const cx = this.map_img_natural_width * (1 - ((lat - this.coordinate.sounth_lat) / (this.coordinate.north_lat - this.coordinate.sounth_lat)));
+          const cy = this.map_img_natural_height * (1 - ((lng - this.coordinate.west_lng) / (this.coordinate.east_lng - this.coordinate.west_lng)));
+
+          // const cx = this.map_img_natural_width * ((x - this.coordinate.west_lng) / (this.coordinate.east_lng - this.coordinate.west_lng));
+          // const cy = this.map_img_natural_height * (1 - ((y - this.coordinate.sounth_lat) / (this.coordinate.north_lat - this.coordinate.sounth_lat)));
 
           const point = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-          point.setAttributeNS(null, "cx", x);
-          point.setAttributeNS(null, "cy", y);
+          point.setAttributeNS(null, "cx", cx);
+          point.setAttributeNS(null, "cy", cy);
           // point.setAttributeNS(null, "cy", -y); 本当はこれ
           point.setAttributeNS(null, "r", r);
 
@@ -984,7 +890,7 @@
           this.points.appendChild(point);
 
           // 現在地点を示す効果を描画
-          this.drawCurrentEffect(x, y, 2 * r);
+          this.drawCurrentEffect(cx, cy, 2 * r);
         }
 
         // 現在地点表現を描画
@@ -994,8 +900,8 @@
           this.present_effect.setAttribute("r", r);
         }
 
-        updateValue(x, y) {
-          console.log(`x:${x}, y:${y}`);
+        updateValue(lat, lng) {
+          // console.log(`x:${x}, y:${y}`);
           // 最大表示数を超えたら削除
           if (this.points.children.length >= this.max_points_num)
             this.points.removeChild(this.points.firstChild);
@@ -1008,7 +914,7 @@
           // console.log(pixel_data);
           // this.checkAlert(pixel_data, this.present_effect, this.map_wrapper_node_id, this.danger_val_range, 'map');
 
-          this.drawPoint(x, y, 5);
+          this.drawPoint(lat, lng, this.map_img_natural_width / 50);
         }
       }
     </script>
@@ -1034,28 +940,79 @@
               if (this.response) {
                 const res_text = this.responseText;
                 const res_obj = JSON.parse(res_text);
-                // toFix(n)で固定小数点表記可能
-                dataset.alt = res_obj.height / 10;
-                dataset.rpm = res_obj.rpm;
-                dataset.gspd = res_obj.gspd;
-                dataset.aspd = res_obj.aspd;
-                dataset.lat = res_obj.lat;
-                dataset.lng = res_obj.lng;
-                dataset.roll = res_obj.roll;
-                dataset.pitch = res_obj.pitch;
-                dataset.yaw = res_obj.yaw;
+                if (res_obj !== null) {
+                  // 数値が文字列として来るので、数値に変換
+                  dataset.alt = parseFloat(res_obj.height) / 100.0;
+                  dataset.rpm = parseFloat(res_obj.rpm);
+                  dataset.gspd = parseFloat(res_obj.gspd);
+                  dataset.aspd = parseFloat(res_obj.aspd);
+                  dataset.lat = parseFloat(res_obj.lat) / 100.0;
+                  dataset.lng = parseFloat(res_obj.lng) / 100.0;
+                  dataset.roll = parseFloat(res_obj.roll);
+                  dataset.pitch = parseFloat(res_obj.pitch);
+                  dataset.yaw = parseFloat(res_obj.yaw);
+                } else {
+                  dataset.alt = -1.0;
+                  dataset.rpm = -1.0;
+                  dataset.gspd = -1.0;
+                  dataset.aspd = -1.0;
+                  dataset.lat = -1.0;
+                  dataset.lng = -1.0;
+                  dataset.roll = -1.0;
+                  dataset.pitch = -1.0;
+                  dataset.yaw = -1.0;
+                }
               }
             }
           }
+
+          httpRequest.onerror = function (e) {
+            console.error(`${httpRequest.status}: ${httpRequest.statusText}`);
+          }
+
           httpRequest.open('GET', 'http://192.168.4.1/data', true);
           //httpRequest.responseType = 'json';
           // httpRequest.setRequestHeader('Content-Type', 'application/json');
           httpRequest.setRequestHeader('Content-Type', 'text/plain');
           httpRequest.send(null);
         } catch (e) {
-          console.log(e.message);
-          console.log(e.stack);
+          console.error(e.message);
+          console.error(e.stack);
         }
+
+        if (Object.keys(dataset).length === 0) {
+          dataset.alt = -1.0;
+          dataset.rpm = -1.0;
+          dataset.gspd = -1.0;
+          dataset.aspd = -1.0;
+          dataset.lat = -1.0;
+          dataset.lng = -1.0;
+          dataset.roll = -1.0;
+          dataset.pitch = -1.0;
+          dataset.yaw = -1.0;
+        }
+        console.log(dataset);
+
+        return dataset;
+      }
+
+      // test用
+      function createValues() {
+        let dataset = {};
+        dataset.alt = Math.random() * (alt_barmeter.maxVal - alt_barmeter.minVal) + alt_barmeter.minVal;
+        dataset.lat = Math.random() * Math.abs(map.coordinate.sounth_lat - map.coordinate.north_lat) + map.coordinate.sounth_lat;
+        // dataset.lat = map.coordinate.sounth_lat; // 最小x
+        // dataset.lat = map.coordinate.north_lat; // 最大x
+        dataset.lng = Math.random() * Math.abs(map.coordinate.east_lng - map.coordinate.west_lng) + map.coordinate.west_lng;
+        // dataset.lng = map.coordinate.west_lng; // 最小y
+        // dataset.lng = map.coordinate.east_lng; // 最大y
+        dataset.roll = Math.random() * Math.PI * 2;
+        dataset.pitch = Math.random() * Math.PI * 2;
+        dataset.yaw = Math.random() * Math.PI * 2;
+        dataset.aspd = Math.random() * (aspd_tachometer.maxVal - aspd_tachometer.minVal) + aspd_tachometer.minVal;
+        dataset.gspd = Math.random() * (gspd_tachometer.maxVal - gspd_tachometer.minVal) + gspd_tachometer.minVal;
+        dataset.rpm = Math.random() * (rpm_tachometer.maxVal - rpm_tachometer.minVal) + rpm_tachometer.minVal;
+        dataset.time = new Date();
         return dataset;
       }
 
@@ -1069,6 +1026,7 @@
 
         setInterval(function () {
           const dataset = display();
+          // const dataset = createValues();
           updateValues(dataset);
         }, 1000);
       };
@@ -1076,7 +1034,7 @@
       // update
       function updateValues(dataset) {
         alt_barmeter.updateValue(dataset.alt);
-        map.updateValue(dataset.lng, dataset.lat);
+        map.updateValue(dataset.lat, dataset.lng);
         aspd_tachometer.updateValue(dataset.aspd);
         gspd_tachometer.updateValue(dataset.gspd);
         rpm_tachometer.updateValue(dataset.rpm);
@@ -1112,6 +1070,7 @@
       alert_switch.addEventListener('click', audioPlay, false);
 
       // 全画面表示
+      /*
       const goFS_node = document.getElementById("goFS");
       function toggleFullScreen() {
         let doc = window.document;
@@ -1136,6 +1095,7 @@
         }
       }
       goFS_node.addEventListener('click', toggleFullScreen, false);
+      */
     </script>
   </body>
 
